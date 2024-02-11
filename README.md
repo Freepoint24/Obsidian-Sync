@@ -32,3 +32,29 @@ You can just follow the numbers from 1 to 7 and you are done. Don't worry it wou
 6. You choose your obsidian folder and suggest an alias to be used for ease of use.
 
 After that you only need to open obsidian and type the alias you created to sync the repository.
+
+
+
+To enable auto-syncing
+
+    Run pkg install cronie termux-services
+    Restart Termux by typing exit.
+    Run sv-enable crond
+    Run crontab -e and enter */30 * * * * ~/sync_repo.sh (This syncs every 30 minutes)
+    Click the CTRL button, and type x. Type y and enter.
+    Type nano sync_repo.sh and enter:
+
+#!/bin/bash
+cd ~/storage/shared/<your repository name>
+git add .
+git commit -m "Android Sync $(date)"
+git pull
+git push
+
+(This is a very basic sync and will not handle things like merge conflicts)
+
+    Click the CTRL button, and type x. Type y and enter.
+    Run chmod +x sync_repo.sh
+    Test your script by running it like so ./sync_repo.sh
+
+Assuming Android doesn't kill the background service, it will now sync Obsidian automatically.
